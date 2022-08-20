@@ -35,7 +35,7 @@ const db = mysql.createConnection(
         // THEN ask the user what they want to do next
 
 // Create a new role
-
+// function()
 
 // Get the existing department from the 'department' table
 
