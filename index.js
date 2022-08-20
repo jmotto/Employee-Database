@@ -1,4 +1,4 @@
-const mysql2 = require('mysql2');
+const mysql = require('mysql2');
 const utils = require('util');
 
 // Connect to database
@@ -47,3 +47,12 @@ const db = mysql.createConnection(
 
             // THEN ask the user what they want to do next
         
+
+const createPost =async () => {
+    const departments = await db.query("SELECT * FROM department");
+
+    console.log(departments);
+}
+
+createPost();
+
