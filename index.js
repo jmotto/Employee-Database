@@ -66,22 +66,29 @@ const mainMenu = () => {
 
 mainMenu();
 
+// View all employee
+// SELECT * FROM employee;
+
 async function viewAllEmployees () {
   const employee = await db.query("SELECT * FROM employee");
-  console.log(employee);
+  console.table(employee);
 }
-
-
-
 
 // View all departments
 // SELECT * FROM department;
 
+async function viewAllDepartments () {
+  const department = await db.query("SELECT * FROM department");
+  console.log(department);
+}
+
 // View all roles
 // SELECT * FROM roles;
 
-// View all employee
-// SELECT * FROM employee;
+async function viewAllRoles () {
+  const roles = await db.query("SELECT * FROM role");
+  console.log(roles);
+}
 
 // Create a new departments
 // const addDepartment = () => {
