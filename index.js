@@ -3,6 +3,7 @@ const inquirer = require('inquirer');
 const utils = require('util');
 
 
+
 // Connect to database
 const db = mysql.createConnection(
     {
@@ -13,6 +14,7 @@ const db = mysql.createConnection(
       password: 'password',
       database: 'company_db'
     },
+    console.log(`Connected to the company_db database.`)
   );
 
   db.query = utils.promisify(db.query);
@@ -42,11 +44,11 @@ const openingPrompt = () => {
   })
   .catch((error) => {
     console.log(error);
-  })
+   
+  });
+};
 
-}
-
-
+openingPrompt();
 
 // View all departments
 // SELECT * FROM department;
@@ -65,24 +67,22 @@ const addDepartment = () => {
       name: "department_name",
       type: "input",
       message: "What Department would you like to add?"
-    },
-    {
-      name: "department_id",
-      type: "input",
-      message: "What is the department id?"
     }
   ])
   .then((answers) => {
     console.log(answers);
-  })
-}
 
-function init() {
-  openingPrompt(),
-  addDepartment()
+    db.query("INSET INTO department (name) VALUES (?)", [answer.department_name], (err, res) => {
+      if (err) throw err;
+      console.log(res);
+
+     
+
+    });
+  });
 };
 
-init();
+addDepartment();
 // Prompt the user for the "name" of the department
 
     // THEN run the query
@@ -93,6 +93,36 @@ init();
 
 // Create a new role
 // function()
+const addRole = () => {
+  inquirer.prompt([
+    {
+      name: "title",
+      type: "input",
+      message: "What role would you like to add?"
+    },
+    {
+      name: "salary",
+      type: "input",
+      message: "What is employee's salary"
+    },
+    {
+      name: "department_id",
+      type: "input",
+      message: "What is the department id for this role?"
+    }
+  ])
+  .then((answers) => {
+    console.log(answers);
+
+    db.query("INSET INTO role (title, salary, department_id) VALUES (?, ?, ?)", [answer.title, answer.salary, answer.department_id], (err, res) => {
+      if (err) throw err;
+      console.log(res);
+    });
+  });
+};
+
+addRole();
+
 
 // Get the existing department from the 'department' table
 
@@ -105,21 +135,21 @@ init();
             // THEN ask the user what they want to do next
         
 
-async function createPost() 
-{
-  const departments = await db.query("SELECT * FROM department");
+// async function createPost() 
+// {
+//   const departments = await db.query("SELECT * FROM department");
 
-  console.log(departments);
+//   console.log(departments);
 
-  const role = await db.query("SELECT * FROM role");
+//   const role = await db.query("SELECT * FROM role");
 
-  console.log(role);
+//   console.log(role);
 
-  const employee = await db.query("SELECT * FROM employee");
+//   const employee = await db.query("SELECT * FROM employee");
 
-  console.log(employee);
-}
+//   console.log(employee);
+// }
 
 
-createPost();
+// createPost();
 
