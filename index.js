@@ -105,21 +105,21 @@ init();
             // THEN ask the user what they want to do next
         
 
-// async function createPost() 
-// {
-//   const departments = await db.query("SELECT * FROM department");
+async function createPost() 
+{
+  const departments = await db.query("SELECT * FROM department");
 
-//   console.log(departments);
+  console.log(departments);
 
-//   const role = await db.query("SELECT * FROM role");
+  const role = await db.query("SELECT * FROM role");
 
-//   console.log(role);
+  console.log(role);
 
-//   const employee = await db.query("SELECT * FROM employee");
+  const employee = await db.query("SELECT * FROM employee");
 
-//   console.log(employee);
-// }
+  console.log(employee);
+}
 
 
-// createPost();
+createPost();
 
