@@ -106,6 +106,7 @@ async function viewAllRoles () {
 // };
 const addDepartment = () => {
   inquirer
+  // Prompt the user for the "name" of the department
     .prompt([
       {
         name: "department_name",
@@ -125,7 +126,7 @@ const addDepartment = () => {
 
 // addDepartment();
 
-// Prompt the user for the "name" of the department
+
 
 // THEN run the query
 // INSERT INTO department (name)
@@ -134,39 +135,76 @@ const addDepartment = () => {
 // THEN ask the user what they want to do next
 
 // Create a new role
-// function()
-// const addRole = () => {
-//   inquirer
-//     .prompt([
-//       {
-//         name: "title",
-//         type: "input",
-//         message: "What role would you like to add?",
-//       },
-//       {
-//         name: "salary",
-//         type: "input",
-//         message: "What is employee's salary",
-//       },
-//       {
-//         name: "department_id",
-//         type: "input",
-//         message: "What is the department id for this role?",
-//       },
-//     ])
-//     .then((answers) => {
-//       console.log(answers);
+const addRole = () => {
+  inquirer
+    .prompt([
+      {
+        name: "title",
+        type: "input",
+        message: "What role would you like to add?",
+      },
+      {
+        name: "salary",
+        type: "input",
+        message: "What is employee's salary",
+      },
+      {
+        name: "department_id",
+        type: "input",
+        message: "What is the department id for this role?",
+      },
+    ])
+    .then((answers) => {
+      console.log(answers);
 
-//       db.query(
-//         "INSET INTO role (title, salary, department_id) VALUES (?, ?, ?)",
-//         [answer.title, answer.salary, answer.department_id],
-//         (err, res) => {
-//           if (err) throw err;
-//           console.log(res);
-//         }
-//       );
-//     });
-// };
+      db.query(
+        "INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)",
+        [answers.title, answers.salary, answers.department_id],
+        // (err, res) => {
+        //   if (err) throw err;
+        // }
+      );
+    });
+};
+// Add employee
+const addEmployee = () => {
+  inquirer
+    .prompt([
+      {
+        name: "first_name",
+        type: "input",
+        message: "What is the employee's first name?",
+      },
+      {
+        name: "last_name",
+        type: "input",
+        message: "What is the employee's last name",
+      },
+      {
+        name: "role_id",
+        type: "input",
+        message: "What is the role id for this employee?",
+      },
+      {
+        name: "manager_id",
+        type: "input",
+        message: "What is manager's id number for this employee?",
+      },
+    ])
+    .then((answers) => {
+      console.log(answers);
+
+      db.query(
+        "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)",
+        [answers.first_name, answers.last_name, answers.role_id, answers.manager_id])
+      //   (err,res));
+      //   if (err, res){
+      //     res.status(400).json({ error: err.message });
+      // return;
+        }
+    );
+    };
+
 
 // addRole();
 
