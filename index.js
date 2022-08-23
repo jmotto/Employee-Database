@@ -17,6 +17,7 @@ const db = mysql.createConnection(
 
 db.query = utils.promisify(db.query);
 
+// Initial prompt to main menu
 const mainMenu = () => {
   inquirer
     .prompt([
@@ -91,28 +92,36 @@ async function viewAllRoles () {
 }
 
 // Create a new departments
-// const addDepartment = () => {
-//   inquirer
-//     .prompt([
-//       {
-//         name: "department_name",
-//         type: "input",
-//         message: "What Department would you like to add?",
-//       },
-//     ])
-//     .then((answers) => {
-//       console.log(answers);
-
-//       db.query(
-//         "INSET INTO department (name) VALUES (?)",
-//         [answer.department_name],
-//         (err, res) => {
-//           if (err) throw err;
-//           console.log(res);
-//         }
-//       );
-//     });
+// async function addDepartment () {
+//   const department = await inquirer.prompt 
+//   ([
+//     {
+//       name: "department_name",
+//       type: "input",
+//       message: "What Department would you like to add?",
+//     }
+//   ]);
+//   await db.query("INSERT INTO department (department_name) VALUES (?)")
+//   console.log(department);
 // };
+const addDepartment = () => {
+  inquirer
+    .prompt([
+      {
+        name: "department_name",
+        type: "input",
+        message: "What Department would you like to add?",
+      },
+    ])
+    .then((answers) => {
+      console.log(answers);
+
+      db.query(
+        "INSERT INTO department (department_name) VALUES (?)",
+        [answers.department_name]
+      );
+    });
+};
 
 // addDepartment();
 
