@@ -36,8 +36,8 @@ const openingPrompt = () => {
       ]
     }
   ])
-  .then((openingPrompt) => {
-    console.log(openingPrompt);
+  .then((answer) => {
+    console.log(answer);
   })
   .catch((error) => {
     console.log(error);
