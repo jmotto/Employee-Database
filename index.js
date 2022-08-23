@@ -68,42 +68,24 @@ const mainMenu = () => {
 mainMenu();
 
 // View all employee
-// SELECT * FROM employee;
-
 async function viewAllEmployees () {
   const employee = await db.query("SELECT * FROM employee");
   console.table(employee);
 }
 
 // View all departments
-// SELECT * FROM department;
-
 async function viewAllDepartments () {
   const department = await db.query("SELECT * FROM department");
   console.log(department);
 }
 
 // View all roles
-// SELECT * FROM roles;
-
 async function viewAllRoles () {
   const roles = await db.query("SELECT * FROM role");
   console.log(roles);
 }
 
-// Create a new departments
-// async function addDepartment () {
-//   const department = await inquirer.prompt 
-//   ([
-//     {
-//       name: "department_name",
-//       type: "input",
-//       message: "What Department would you like to add?",
-//     }
-//   ]);
-//   await db.query("INSERT INTO department (department_name) VALUES (?)")
-//   console.log(department);
-// };
+// Add department
 const addDepartment = () => {
   inquirer
   // Prompt the user for the "name" of the department
@@ -124,17 +106,9 @@ const addDepartment = () => {
     });
 };
 
-// addDepartment();
-
-
-
-// THEN run the query
-// INSERT INTO department (name)
-// VALUES ("Sales");
-
 // THEN ask the user what they want to do next
 
-// Create a new role
+// Add role
 const addRole = () => {
   inquirer
     .prompt([
@@ -160,9 +134,6 @@ const addRole = () => {
       db.query(
         "INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)",
         [answers.title, answers.salary, answers.department_id],
-        // (err, res) => {
-        //   if (err) throw err;
-        // }
       );
     });
 };
@@ -206,7 +177,6 @@ const addEmployee = () => {
     };
 
 
-// addRole();
 
 // Get the existing department from the 'department' table
 
