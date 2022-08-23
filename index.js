@@ -36,19 +36,16 @@ const openingPrompt = () => {
       ]
     }
   ])
-  .then((answer) => {
-    console.log(answer);
+  .then((answers) => {
+
+    console.log(answers);
   })
   .catch((error) => {
     console.log(error);
   })
 
 }
-function init() {
-  openingPrompt()
-};
 
-init();
 
 
 // View all departments
@@ -62,7 +59,30 @@ init();
 // SELECT * FROM employee;
 
 // Create a new departments
+const addDepartment = () => {
+  inquirer.prompt([
+    {
+      name: "department_name",
+      type: "input",
+      message: "What Department would you like to add?"
+    },
+    {
+      name: "department_id",
+      type: "input",
+      message: "What is the department id?"
+    }
+  ])
+  .then((answers) => {
+    console.log(answers);
+  })
+}
 
+function init() {
+  openingPrompt(),
+  addDepartment()
+};
+
+init();
 // Prompt the user for the "name" of the department
 
     // THEN run the query
@@ -85,21 +105,21 @@ init();
             // THEN ask the user what they want to do next
         
 
-async function createPost() 
-{
-  const departments = await db.query("SELECT * FROM department");
+// async function createPost() 
+// {
+//   const departments = await db.query("SELECT * FROM department");
 
-  console.log(departments);
+//   console.log(departments);
 
-  const role = await db.query("SELECT * FROM role");
+//   const role = await db.query("SELECT * FROM role");
 
-  console.log(role);
+//   console.log(role);
 
-  const employee = await db.query("SELECT * FROM employee");
+//   const employee = await db.query("SELECT * FROM employee");
 
-  console.log(employee);
-}
+//   console.log(employee);
+// }
 
 
-createPost();
+// createPost();
 
