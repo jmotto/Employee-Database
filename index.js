@@ -1,5 +1,7 @@
 const mysql = require('mysql2');
+const inquirer = require('inquirer');
 const utils = require('util');
+
 
 // Connect to database
 const db = mysql.createConnection(
@@ -15,8 +17,43 @@ const db = mysql.createConnection(
 
   db.query = utils.promisify(db.query);
 
+
+const openingPrompt = () => {
+  inquirer.prompt ([
+    {
+      type: "list",
+      name: "task",
+      message: "What would you like to do?",
+      choices: [
+        "View All Employees",
+        "Add Employee",
+        "Update Employee Role",
+        "View All Roles",
+        "Add Role",
+        "View All Departments",
+        "Add Department",
+        "Quit"
+      ]
+    }
+  ])
+  .then((openingPrompt) => {
+    console.log(openingPrompt);
+  })
+  .catch((error) => {
+    console.log(error);
+  })
+
+}
+function init() {
+  openingPrompt()
+};
+
+init();
+
+
 // View all departments
 // SELECT * FROM department;
+
 
 // View all roles
 // SELECT * FROM roles;
@@ -48,11 +85,21 @@ const db = mysql.createConnection(
             // THEN ask the user what they want to do next
         
 
-const createPost =async () => {
-    const departments = await db.query("SELECT * FROM department");
+async function createPost() 
+{
+  const departments = await db.query("SELECT * FROM department");
 
-    console.log(departments);
+  console.log(departments);
+
+  const role = await db.query("SELECT * FROM role");
+
+  console.log(role);
+
+  const employee = await db.query("SELECT * FROM employee");
+
+  console.log(employee);
 }
+
 
 createPost();
 
