@@ -1,58 +1,81 @@
-const mysql = require('mysql2');
-const inquirer = require('inquirer');
-const utils = require('util');
-
-
+const mysql = require("mysql2");
+const inquirer = require("inquirer");
+const utils = require("util");
 
 // Connect to database
 const db = mysql.createConnection(
-    {
-      host: 'localhost',
-      // MySQL username,
-      user: 'root',
-      // MySQL password
-      password: 'password',
-      database: 'company_db'
-    },
-    console.log(`Connected to the company_db database.`)
-  );
+  {
+    host: "localhost",
+    // MySQL username,
+    user: "root",
+    // MySQL password
+    password: "password",
+    database: "company_db",
+  },
+  console.log(`Connected to the company_db database.`)
+);
 
-  db.query = utils.promisify(db.query);
+db.query = utils.promisify(db.query);
 
+const mainMenu = () => {
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "task",
+        message: "What would you like to do?",
+        choices: 
+        [
+          "View All Employees",
+          "Add Employee",
+          "Update Employee Role",
+          "View All Roles",
+          "Add Role",
+          "View All Departments",
+          "Add Department",
+          "Quit"
+        ],
+      },
+    ])
+    .then((answer) => {
+      console.log(answer);
 
-const openingPrompt = () => {
-  inquirer.prompt ([
-    {
-      type: "list",
-      name: "task",
-      message: "What would you like to do?",
-      choices: [
-        "View All Employees",
-        "Add Employee",
-        "Update Employee Role",
-        "View All Roles",
-        "Add Role",
-        "View All Departments",
-        "Add Department",
-        "Quit"
-      ]
-    }
-  ])
-  .then((answers) => {
-
-    console.log(answers);
-  })
-  .catch((error) => {
-    console.log(error);
-   
-  });
+      switch (answer.task) {
+        case "View All Employees":
+          return viewAllEmployees();
+        case "Add Employee":
+          return addEmployee();
+        case "Update Employee Role":
+          return updateRole();
+        case "View All Roles":
+          return viewAllRoles();
+        case "Add Role":
+          return addRole();
+        case "View All Departments":
+          return viewAllDepartments();
+        case "Add Department":
+          return addDepartment();
+        case "quit":
+          return quit();
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 
-openingPrompt();
+mainMenu();
+
+async function viewAllEmployees () {
+  const employee = await db.query("SELECT * FROM employee");
+  console.log(employee);
+}
+
+
+
 
 // View all departments
 // SELECT * FROM department;
-
 
 // View all roles
 // SELECT * FROM roles;
@@ -61,81 +84,87 @@ openingPrompt();
 // SELECT * FROM employee;
 
 // Create a new departments
-const addDepartment = () => {
-  inquirer.prompt([
-    {
-      name: "department_name",
-      type: "input",
-      message: "What Department would you like to add?"
-    }
-  ])
-  .then((answers) => {
-    console.log(answers);
+// const addDepartment = () => {
+//   inquirer
+//     .prompt([
+//       {
+//         name: "department_name",
+//         type: "input",
+//         message: "What Department would you like to add?",
+//       },
+//     ])
+//     .then((answers) => {
+//       console.log(answers);
 
-    db.query("INSET INTO department (name) VALUES (?)", [answer.department_name], (err, res) => {
-      if (err) throw err;
-      console.log(res);
+//       db.query(
+//         "INSET INTO department (name) VALUES (?)",
+//         [answer.department_name],
+//         (err, res) => {
+//           if (err) throw err;
+//           console.log(res);
+//         }
+//       );
+//     });
+// };
 
-     
+// addDepartment();
 
-    });
-  });
-};
-
-addDepartment();
 // Prompt the user for the "name" of the department
 
-    // THEN run the query
-    // INSERT INTO department (name)
-    // VALUES ("Sales");
+// THEN run the query
+// INSERT INTO department (name)
+// VALUES ("Sales");
 
-        // THEN ask the user what they want to do next
+// THEN ask the user what they want to do next
 
 // Create a new role
 // function()
-const addRole = () => {
-  inquirer.prompt([
-    {
-      name: "title",
-      type: "input",
-      message: "What role would you like to add?"
-    },
-    {
-      name: "salary",
-      type: "input",
-      message: "What is employee's salary"
-    },
-    {
-      name: "department_id",
-      type: "input",
-      message: "What is the department id for this role?"
-    }
-  ])
-  .then((answers) => {
-    console.log(answers);
+// const addRole = () => {
+//   inquirer
+//     .prompt([
+//       {
+//         name: "title",
+//         type: "input",
+//         message: "What role would you like to add?",
+//       },
+//       {
+//         name: "salary",
+//         type: "input",
+//         message: "What is employee's salary",
+//       },
+//       {
+//         name: "department_id",
+//         type: "input",
+//         message: "What is the department id for this role?",
+//       },
+//     ])
+//     .then((answers) => {
+//       console.log(answers);
 
-    db.query("INSET INTO role (title, salary, department_id) VALUES (?, ?, ?)", [answer.title, answer.salary, answer.department_id], (err, res) => {
-      if (err) throw err;
-      console.log(res);
-    });
-  });
-};
+//       db.query(
+//         "INSET INTO role (title, salary, department_id) VALUES (?, ?, ?)",
+//         [answer.title, answer.salary, answer.department_id],
+//         (err, res) => {
+//           if (err) throw err;
+//           console.log(res);
+//         }
+//       );
+//     });
+// };
 
-addRole();
-
+// addRole();
 
 // Get the existing department from the 'department' table
 
-    // THEN // prompt the user for the "title", "salary", and "department" for the role
+// THEN // prompt the user for the "title", "salary", and "department" for the role
 
-        // THEN Run the query
-        // INSERT INTO role (title, salary, department_id)
-        // VALUES ("?, ?, ?")
+// THEN Run the query
+// INSERT INTO role (title, salary, department_id)
+// VALUES ("?, ?, ?")
 
-            // THEN ask the user what they want to do next
-        
+// THEN ask the user what they want to do next
 
-// async function createPost() 
+// async function createPost()
 // {
 //   const departments = await db.query("SELECT * FROM department");
 
@@ -150,6 +179,7 @@ addRole();
 //   console.log(employee);
 // }
 
-
 // createPost();
 
+function init() {}
+init ();
