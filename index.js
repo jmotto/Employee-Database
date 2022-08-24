@@ -228,7 +228,7 @@ async function deleteEmployee() {
     {
       name: "employeeId",
       type: "input",
-      message: "Enter the employee ID of the employee you would like to delete?",
+      message: "Enter the employee ID of the employee you would like to delete?"
     }
   ]);
   await db.query("DELETE FROM employee WHERE id = ?", employeeId);
@@ -244,10 +244,26 @@ async function deleteRole() {
     {
       name: "roleId",
       type: "input",
-      message: "Enter the role ID of the role you would like to delete?",
+      message: "Enter the role ID of the role you would like to delete?"
     }
   ]);
   await db.query("DELETE FROM role WHERE id = ?", roleId);
+  mainMenu();
+};
+
+// Delete Department
+async function deleteDepartment() {
+  const getDepartmentList = await db.query("SELECT * FROM department");
+    console.table(getDepartmentList);
+    
+  const { departmentId } = await inquirer.prompt([
+    {
+      name: "departmentId",
+      type: "input",
+      message: "Enter the department ID of the department you would like to delete?"
+    }
+  ]);
+  await db.query("DELETE FROM department WHERE id = ?", departmentId);
   mainMenu();
 };
 // Get the existing department from the 'department' table
