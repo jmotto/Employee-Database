@@ -25,8 +25,7 @@ const mainMenu = () => {
         type: "list",
         name: "task",
         message: "What would you like to do?",
-        choices: 
-        [
+        choices: [
           "View All Employees",
           "Add Employee",
           "Update Employee Role",
@@ -34,7 +33,10 @@ const mainMenu = () => {
           "Add Role",
           "View All Departments",
           "Add Department",
-          "Quit"
+          "Delete Employee",
+          "Delete Role",
+          "Delete Department",
+          "Quit",
         ],
       },
     ])
@@ -67,46 +69,49 @@ const mainMenu = () => {
 
 mainMenu();
 
-// View all employee
-async function viewAllEmployees () {
+// View all employees
+async function viewAllEmployees() {
   const employee = await db.query("SELECT * FROM employee");
   console.table(employee);
+  mainMenu();
 }
 
 // View all departments
-async function viewAllDepartments () {
+async function viewAllDepartments() {
   const department = await db.query("SELECT * FROM department");
-  console.log(department);
+  console.table(department);
+
+  mainMenu();
 }
 
 // View all roles
-async function viewAllRoles () {
+async function viewAllRoles() {
   const roles = await db.query("SELECT * FROM role");
-  console.log(roles);
+  console.table(roles);
+  mainMenu();
 }
 
 // Add department
 const addDepartment = () => {
   inquirer
-  // Prompt the user for the "name" of the department
+    // Prompt the user for the "name" of the department
     .prompt([
       {
         name: "department_name",
         type: "input",
-        message: "What Department would you like to add?",
+        message: "What is the name of the department?",
       },
     ])
     .then((answers) => {
-      console.log(answers);
-
-      db.query(
-        "INSERT INTO department (department_name) VALUES (?)",
-        [answers.department_name]
+      db.query("INSERT INTO department (department_name) VALUES (?)", 
+      [
+        answers.department_name,
+      ]
       );
+      console.log("added to the database");
+      mainMenu();
     });
 };
-
-// THEN ask the user what they want to do next
 
 // Add role
 const addRole = () => {
@@ -125,18 +130,24 @@ const addRole = () => {
       {
         name: "department_id",
         type: "input",
-        message: "What is the department id for this role?",
+        message: "What department does this role belong to?",
       },
     ])
     .then((answers) => {
-      console.log(answers);
 
       db.query(
         "INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)",
-        [answers.title, answers.salary, answers.department_id],
+        [
+          answers.title, 
+          answers.salary, 
+          answers.department
+        ]
       );
+      console.log("added to the database");
+      mainMenu();
     });
 };
+
 // Add employee
 const addEmployee = () => {
   inquirer
@@ -163,19 +174,44 @@ const addEmployee = () => {
       },
     ])
     .then((answers) => {
-      console.log(answers);
 
       db.query(
         "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)",
-        [answers.first_name, answers.last_name, answers.role_id, answers.manager_id])
-      //   (err,res));
-      //   if (err, res){
-      //     res.status(400).json({ error: err.message });
-      // return;
-        }
-    );
-    };
+        [
+          answers.first_name,
+          answers.last_name,
+          answers.role_id,
+          answers.manager_id,
+        ]
+      );
+      console.log("added to the database");
+      mainMenu();
+    });
+};
 
+// Update Employee Role
+const updateRole = () => {
+  inquirer
+    .prompt([
+      {
+        name: "update_employee",
+        type: "input",
+        message: "What employee would you like to update?",
+        // choices: [viewAllEmployees]
+      },
+      {
+        name: "new_role",
+        type: "input",
+        message: "What is the employee's new role?",
+      }
+    ])
+    .then((answers) => {
+      db.query('UPDATE employee SET role_id= ? WHERE first_name = ?', [answers.new_role, answers.update_employee]
+      );
+      console.log("added to the database");
+      mainMenu();
+    });
+};
 
 
 // Get the existing department from the 'department' table
@@ -206,4 +242,4 @@ const addEmployee = () => {
 // createPost();
 
 function init() {}
-init ();
+init();
