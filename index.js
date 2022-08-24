@@ -60,6 +60,10 @@ const mainMenu = () => {
           return addDepartment();
         case "Delete Employee":
           return deleteEmployee();
+        case "Delete Role":
+          return deleteRole();
+        case "Delete Department":
+          return deleteDepartment();
         case "quit":
           return quit();
       }
@@ -215,10 +219,11 @@ const updateRole = () => {
     });
 };
 
+// Delete Employee
 async function deleteEmployee() {
   const getEmployeeList = await db.query("SELECT * FROM employee");
     console.table(getEmployeeList);
-    
+
   const { employeeId } = await inquirer.prompt([
     {
       name: "employeeId",
@@ -227,6 +232,22 @@ async function deleteEmployee() {
     }
   ]);
   await db.query("DELETE FROM employee WHERE id = ?", employeeId);
+  mainMenu();
+};
+
+// Delete Role
+async function deleteRole() {
+  const getRoleList = await db.query("SELECT * FROM role");
+    console.table(getRoleList);
+    
+  const { roleId } = await inquirer.prompt([
+    {
+      name: "roleId",
+      type: "input",
+      message: "Enter the role ID of the role you would like to delete?",
+    }
+  ]);
+  await db.query("DELETE FROM role WHERE id = ?", roleId);
   mainMenu();
 };
 // Get the existing department from the 'department' table
