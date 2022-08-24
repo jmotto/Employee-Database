@@ -58,6 +58,8 @@ const mainMenu = () => {
           return viewAllDepartments();
         case "Add Department":
           return addDepartment();
+        case "Delete Employee":
+          return deleteEmployee();
         case "quit":
           return quit();
       }
@@ -213,7 +215,20 @@ const updateRole = () => {
     });
 };
 
-
+async function deleteEmployee() {
+  const getEmployeeList = await db.query("SELECT * FROM employee");
+    console.table(getEmployeeList);
+    
+  const { employeeId } = await inquirer.prompt([
+    {
+      name: "employeeId",
+      type: "input",
+      message: "Enter the employee ID of the employee you would like to delete?",
+    }
+  ]);
+  await db.query("DELETE FROM employee WHERE id = ?", employeeId);
+  mainMenu();
+};
 // Get the existing department from the 'department' table
 
 // THEN // prompt the user for the "title", "salary", and "department" for the role
