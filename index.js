@@ -196,23 +196,44 @@ const addEmployee = () => {
 };
 
 // Update Employee Role
+// async function updateRole() {
+//   const getEmployeeList = await db.query("SELECT * FROM employee");
+//     console.table(getEmployeeList);
+
+//   const { updateEmployeeId } = await inquirer.prompt([
+//     {
+//       name: "roleId",
+//       type: "input",
+//       message: "Enter the role ID of the employee you would like to update?"
+//     },
+//     {
+//       name: "new_role",
+//       type: "input",
+//       message: "What is the employee's new role ID?",
+//     }
+//   ]);
+//   await db.query("UPDATE employee SET role_id = ? WHERE id = ?", updateEmployeeId);
+//   mainMenu();
+// };
+
+
 const updateRole = () => {
   inquirer
     .prompt([
       {
         name: "update_employee",
         type: "input",
-        message: "What employee would you like to update?",
-        // choices: [viewAllEmployees]
+        message: "What employee id that would you like to update?",
       },
       {
         name: "new_role",
         type: "input",
-        message: "What is the employee's new role?",
+        message: "What is the employee's new role id?",
       }
     ])
     .then((answers) => {
-      db.query('UPDATE employee SET role_id= ? WHERE first_name = ?', [answers.new_role, answers.update_employee]
+      
+      db.query('UPDATE employee SET role_id= ? WHERE id = ?', [answers.new_role, answers.update_employee]
       );
       console.log("added to the database");
       mainMenu();
@@ -292,6 +313,9 @@ async function deleteDepartment() {
 // }
 
 // createPost();
+function quit(){
+  process.exit(1)
+}
 
 function init() {}
 init();
