@@ -1,7 +1,7 @@
 # Employee Database
 
 ## Description
-The Employee Database is an application for businesses to be able to view and manage departments, roles, and employees in their company so that they can organize and plan their business. 
+The Employee Database is a content management system (CMS) for businesses to be able to view and manage departments, roles, and employees in their company so that they can organize and plan their business. 
 
 ## Table of Contents
   * [Installation](#installation)
@@ -47,4 +47,6 @@ To launch the application from the command-line:
   Jamie Otto
 
 ## Questions
-  If you have any questions about this project, please contact [jmotto31@gmail.com](mailto:jmotto31@gmail.com). To view more of my projects, go to [jmotto](https://github.com/jmotto).
+  If you have any questions about this project, please contact [jmotto31@gmail.com](mailto:jmotto31@gmail.com). 
+  <br/>
+  To view more of my projects, go to [jmotto](https://github.com/jmotto).
