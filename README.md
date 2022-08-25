@@ -9,7 +9,6 @@ The Employee Database is a content management system (CMS) for businesses to be 
   * [Usage](#usage)
   * [License](#license)
   * [Contributors](#contributors)
-  * [Tests](#tests)
   * [Questions](#questions)
 ## Installation
 [MySQL2 package](https://www.npmjs.com/package/mysql2) to connect to your MySQL database and perform queries
