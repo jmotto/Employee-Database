@@ -1,6 +1,7 @@
 const mysql = require("mysql2");
 const inquirer = require("inquirer");
 const utils = require("util");
+const cTable = require('console.table');
 
 // Connect to database
 const db = mysql.createConnection(
@@ -16,6 +17,10 @@ const db = mysql.createConnection(
 );
 
 db.query = utils.promisify(db.query);
+
+const table = cTable.getTable();
+
+console.log(table);
 
 // Initial prompt to main menu
 const mainMenu = () => {
@@ -41,7 +46,6 @@ const mainMenu = () => {
       },
     ])
     .then((answer) => {
-      console.log(answer);
 
       switch (answer.task) {
         case "View All Employees":
@@ -64,8 +68,10 @@ const mainMenu = () => {
           return deleteRole();
         case "Delete Department":
           return deleteDepartment();
-        case "quit":
-          return quit();
+        default:
+           quit();
+           break;
+         
       }
     })
     .catch((error) => {
@@ -77,7 +83,17 @@ mainMenu();
 
 // View all employees
 async function viewAllEmployees() {
-  const employee = await db.query("SELECT * FROM employee");
+  const employee = await db.query(
+    `
+      SELECT employee.id AS ID, employee.first_name, employee.last_name, role.title, role.salary, department.department_name AS department, employee.manager_id AS manager_id
+      FROM employee
+      LEFT JOIN role 
+      ON role.id = employee.role_id
+      LEFT JOIN department
+      ON role.department_id = department.id
+      ORDER BY employee.id
+      `);
+  
   console.table(employee);
   mainMenu();
 }
@@ -92,7 +108,14 @@ async function viewAllDepartments() {
 
 // View all roles
 async function viewAllRoles() {
-  const roles = await db.query("SELECT * FROM role");
+  const roles = await db.query(
+    `
+      SELECT role.id, role.title, role.salary, department.department_name AS department, department_id
+      FROM role
+      INNER JOIN department
+      ON department.id = role.department_id
+      ORDER BY department_name
+      `);
   console.table(roles);
   mainMenu();
 }
@@ -136,7 +159,7 @@ const addRole = () => {
       {
         name: "department_id",
         type: "input",
-        message: "What department does this role belong to?",
+        message: "Enter the department id this role belongs to?",
       },
     ])
     .then((answers) => {
@@ -146,7 +169,7 @@ const addRole = () => {
         [
           answers.title, 
           answers.salary, 
-          answers.department
+          answers.department_id
         ]
       );
       console.log("added to the database");
@@ -202,9 +225,9 @@ const addEmployee = () => {
 
 //   const { updateEmployeeId } = await inquirer.prompt([
 //     {
-//       name: "roleId",
+//       name: "employee_id",
 //       type: "input",
-//       message: "Enter the role ID of the employee you would like to update?"
+//       message: "Enter the employee ID of the employee you would like to update?"
 //     },
 //     {
 //       name: "new_role",
@@ -212,12 +235,13 @@ const addEmployee = () => {
 //       message: "What is the employee's new role ID?",
 //     }
 //   ]);
-//   await db.query("UPDATE employee SET role_id = ? WHERE id = ?", updateEmployeeId);
+//   await db.query("UPDATE employee SET id = ? WHERE id = ?", updateEmployeeId);
 //   mainMenu();
 // };
 
 
 const updateRole = () => {
+  
   inquirer
     .prompt([
       {
@@ -233,7 +257,11 @@ const updateRole = () => {
     ])
     .then((answers) => {
       
-      db.query('UPDATE employee SET role_id= ? WHERE id = ?', [answers.new_role, answers.update_employee]
+      db.query('UPDATE employee SET role_id= ? WHERE id = ?', 
+      [
+        answers.new_role, 
+        answers.update_employee
+      ]
       );
       console.log("added to the database");
       mainMenu();
@@ -242,7 +270,7 @@ const updateRole = () => {
 
 // Delete Employee
 async function deleteEmployee() {
-  const getEmployeeList = await db.query("SELECT * FROM employee");
+  const getEmployeeList = await db.query("SELECT employee.id AS ID, employee.first_name, employee.last_name, role.title AS title FROM employee LEFT JOIN role ON role.id = employee.role_id ORDER BY employee.id");
     console.table(getEmployeeList);
 
   const { employeeId } = await inquirer.prompt([
@@ -287,35 +315,11 @@ async function deleteDepartment() {
   await db.query("DELETE FROM department WHERE id = ?", departmentId);
   mainMenu();
 };
-// Get the existing department from the 'department' table
 
-// THEN // prompt the user for the "title", "salary", and "department" for the role
-
-// THEN Run the query
-// INSERT INTO role (title, salary, department_id)
-// VALUES ("?, ?, ?")
-
-// THEN ask the user what they want to do next
-
-// async function createPost()
-// {
-//   const departments = await db.query("SELECT * FROM department");
-
-//   console.log(departments);
-
-//   const role = await db.query("SELECT * FROM role");
-
-//   console.log(role);
-
-//   const employee = await db.query("SELECT * FROM employee");
-
-//   console.log(employee);
-// }
-
-// createPost();
+// Exit
 function quit(){
-  process.exit(1)
-}
+  process.exit();
+};
 
 function init() {}
 init();
